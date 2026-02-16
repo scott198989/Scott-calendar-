@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String             @id @default(cuid())
+  name          String?
+  email         String             @unique
+  password      String
+  role          Role               @default(USER)
+  image         String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  events        Event[]
+  comments      Comment[]
+  categories    Category[]
+  subscriptions PushSubscription[]
+}
+
+model Event {
+  id             String    @id @default(cuid())
+  title          String
+  description    String?
+  startDate      DateTime
+  endDate        DateTime
+  allDay         Boolean   @default(false)
+  recurring      Boolean   @default(false)
+  recurrenceRule String?
+  location       String?
+  categoryId     String?
+  category       Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdById    String
+  createdBy      User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  comments       Comment[]
+  isSystemEvent  Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([startDate, endDate])
+  @@index([categoryId])
+  @@index([createdById])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  color       String
+  icon        String?
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  events      Event[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([name, createdById])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  text      String
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([eventId])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum Role {
+  ADMIN
+  USER
+}

@@ -1,15 +1,115 @@
-# Scott-calendar-
-for claude code:
+# Scott's Calendar
 
-you should build this calender that can add events and delete events, so full crud.  i want you to hard code my work schedule (with ability to change if needed).  starting wotj todays date, feb 16 2026.  my work schedule alternates between short weeks and long weeks.  the nexr time i go to work is wed feburary 18 at 8:30 pm.  i will get off of work the next day, thursday the 19th at 10pm.  it will be like that for thursday night, and friday night.  this is the short week.  on my long weeks just add another day sat 8:30 pm to sun 10am.  
-my school dates are every monday and wedensday from 10:30 am to 5pm.  
-gunner needs to be let out to go to the bathroom on my work days. 
-i should be able to add or delete events, update etc.  i should also be able to categorize events by color coded grouping. 
-users shpuld be able to subscribe to this calender and recieve push notifications about upcoming evens a few days before and the day of.  
-i want an admin tole where i can change things.
-users should be able to add comments, and events to the same calendar as well.  
-every wednseday on my short week i get paid from ISOflex.  not the long week.  
-every first of the month i get my va disability pay.
-allow me and other users to create categories to put in the calendee and color code them
-make this visually appealing, stunnijg and elogant craftsman ship, make sure it works, add in anything you think would raise standard of living and the app more useful
-make deployable to vercel and deploy 
+A full-featured personal calendar application built with Next.js 14, featuring an alternating work schedule, school tracking, pet care reminders, payday tracking, and multi-user collaboration.
+
+## Features
+
+- **Full CRUD Events** - Create, read, update, and delete events with full form support
+- **Alternating Work Schedule** - Auto-generated short/long week shifts (8:30 PM - 10:00 AM)
+- **School Schedule** - Monday & Wednesday classes (10:30 AM - 5:00 PM)
+- **Gunner Reminders** - Pet bathroom reminders before/after work shifts
+- **Pay Day Tracking** - ISOFlex (short-week Wednesdays) and VA Disability (1st of month)
+- **3 Calendar Views** - Month, Week, and Day views with smooth transitions
+- **Color-Coded Categories** - 10 color options with custom icons
+- **User Authentication** - Admin and User roles with NextAuth
+- **Comments** - Users can comment on events
+- **Push Notifications** - Web Push API for event reminders
+- **Responsive Design** - Mobile-friendly with sidebar drawer
+- **Dark Mode** - Automatic system preference detection
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL via Prisma ORM
+- **Auth**: NextAuth.js v5
+- **Icons**: Lucide React
+- **Notifications**: Web Push API
+- **Deployment**: Vercel
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL database (local or cloud: Neon, Supabase, Vercel Postgres, etc.)
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+Copy `.env.example` to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+- `DATABASE_URL` - Your PostgreSQL connection string
+- `NEXTAUTH_SECRET` - Random secret for session encryption
+- `NEXTAUTH_URL` - Your app URL (http://localhost:3000 for dev)
+
+### 3. Set up the database
+
+```bash
+npx prisma db push
+```
+
+### 4. Run the development server
+
+```bash
+npm run dev
+```
+
+### 5. Seed the database
+
+Visit the admin page after logging in as admin, or call:
+
+```bash
+curl -X POST http://localhost:3000/api/seed
+```
+
+This creates the admin account, default categories, and 6 months of scheduled events.
+
+**Default admin login:**
+- Email: `scott@calendar.app`
+- Password: `admin123`
+
+## Schedule Reference
+
+| Type | Schedule | Details |
+|------|----------|---------|
+| **Work (Short Week)** | Wed, Thu, Fri | 8:30 PM - 10:00 AM next day |
+| **Work (Long Week)** | Wed, Thu, Fri, Sat | 8:30 PM - 10:00 AM next day |
+| **School** | Mon & Wed | 10:30 AM - 5:00 PM |
+| **ISOFlex Pay** | Wed (short weeks) | Every other Wednesday |
+| **VA Disability** | 1st of month | Monthly |
+| **Gunner** | Work days | Before (7:30 PM) & after (10:00 AM) |
+
+Week pattern starts **Feb 18, 2026 = Short Week**, then alternates.
+
+## Deployment to Vercel
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Add environment variables in Vercel dashboard
+4. Set up a PostgreSQL database (Vercel Postgres, Neon, or Supabase)
+5. Deploy
+
+The `vercel.json` and build scripts are pre-configured.
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run db:push` | Push schema to database |
+| `npm run db:migrate` | Run database migrations |
+| `npm run db:studio` | Open Prisma Studio |
